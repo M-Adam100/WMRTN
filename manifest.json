@@ -1,0 +1,31 @@
+{
+	"name": "WMRTN",
+	"version": "1.0",
+	"description": "",
+	"manifest_version": 3,
+	"incognito": "split",
+	"icons": {
+		"128": "icons/128.png"
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"action": {},
+	"permissions": [
+		"storage",
+		"tabs",
+		"scripting"
+	],
+	"host_permissions": [
+		"*://*.walmart.com/*"
+	],
+    "web_accessible_resources": [
+        {
+          "matches": ["<all_urls>"],
+          "resources": [
+            "icons/128.png"
+          ]
+        }
+      ]
+}
+
