@@ -2,19 +2,26 @@ console.log("Running Script");
 
 (async () => {
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms*1000));
+    }
+
     function setInput(selector, value) {
         return new Promise((resolve, reject) => {
 
-            const interval = setInterval(() => {
+            const interval = setInterval(async () => {
                 const allSelected = [...document.querySelectorAll(selector)];
                 if (allSelected.length) {
                     clearInterval(interval);
                     for (let i = 0; i < allSelected.length; i++) {
                         const temp = allSelected[i];
+                        temp.scrollIntoView();
                         const prototype = Object.getPrototypeOf(temp);
                         const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value')?.set;
                         prototypeValueSetter.call(temp, value);
                         temp.dispatchEvent(new Event('input', { bubbles: true }));
+                        await sleep(1.5);
+
                     }
                     resolve(true)
                 }
@@ -27,17 +34,20 @@ console.log("Running Script");
 
     const setDropDown = async (selector, value) => {
         return new Promise((resolve, reject) => {
-            const interval = setInterval(() => {
+            const interval = setInterval(async () => {
                 const allSelected = [...document.querySelectorAll(selector)];
                 if (allSelected.length) {
                     clearInterval(interval);
                     for (let i = 0; i < allSelected.length; i++) {
+                        allSelected[i].scrollIntoView();
                         const allOptions = [...allSelected[i].querySelectorAll('option')];
                         const option = allOptions.filter(option => option.innerText.includes(value))[0];
                         if (option) {
                             allSelected[i].value = option.value;
                             allSelected[i].dispatchEvent(new Event('change', { bubbles: true }));
                         }
+
+                        await sleep(1.5);
                     }
                     resolve(true)
                 }
